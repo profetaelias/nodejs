@@ -1,0 +1,26 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "API Rest base para projetos futuros",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/profetaelias/nodejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/profetaelias/nodejs/issues"
+  },
+  "homepage": "https://github.com/profetaelias/nodejs#readme",
+  "dependencies": {
+    "restify": "8.5.0"
+  },
+  "devDependencies": {
+    "@types/restify": "8.4.2"
+  }
+}
