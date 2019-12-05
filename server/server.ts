@@ -27,6 +27,8 @@ export class Server {
                 this.application.listen(environment.server.port, () => {
                     resolve(this.application)
                 })
+
+                this.application.on('restifyError', )
             } catch (error) {
                 reject(error)
             }

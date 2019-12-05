@@ -17,16 +17,20 @@ class UsersRouter extends Router {
         application.get('/users', [(req, res, next) => {
             User.find()
                 .then(this.render(res, next))
+                .catch(next)
         }])
         
         application.get('/users/:id', [(req, res, next) => {
             User.findById(req.params.id)
                 .then(this.render(res, next))
+                .catch(next)
         }])
 
         application.post('/users', [(req, res, next) => {
             let user = new User(req.body)
-            user.save().then(this.render(res, next))
+            user.save()
+                .then(this.render(res, next))
+                .catch(next)
         }])
         
         application.put('/users/:id',(req, res, next) => {
@@ -40,11 +44,14 @@ class UsersRouter extends Router {
                     }
                 })
                 .then(this.render(res, next))
+                .catch(next)
         })
 
         application.patch('/users/:id', (req, res, next) => {
             const options = {new: true}
-            User.findByIdAndUpdate({_id: req.params.id}, req.body, options).then(this.render(res, next))
+            User.findByIdAndUpdate({_id: req.params.id}, req.body, options)
+                .then(this.render(res, next))
+                .catch(next)
         })
 
         application.del('/users/:id', (req, res, next) => {
@@ -56,10 +63,7 @@ class UsersRouter extends Router {
                     } else {
                         res.status(404)
                     }
-                }).catch(error => {
-                    res.status(404)
-                    res.send({message: error.message})
-                })
+                }).catch(next)
                 return next()
         })
     }
