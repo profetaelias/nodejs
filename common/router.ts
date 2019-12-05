@@ -1,4 +1,3 @@
-
 import * as restify from 'restify'
 
 export abstract class Router {

@@ -1,6 +1,7 @@
 import * as restify from 'restify'
 import {environment} from '../common/environment'
 import {Router} from '../common/router'
+import * as mongoose from 'mongoose'
 
 export class Server {
 
@@ -15,6 +16,7 @@ export class Server {
                 })
                 
                 this.application.use(restify.plugins.queryParser())
+                this.application.use(restify.plugins.bodyParser())
                 
                 for (let route of routers) {
                     route.applyRoutes(this.application)
@@ -28,8 +30,18 @@ export class Server {
             }
         })
     }
+    
+    initDB(): Promise<any> {
+        (<any>mongoose).Promise = global.Promise
+        return mongoose.connect(environment.db.url)
+    }
 
     bootstrap(routers: Router[] = []): Promise<Server> {
-        return this.initRoutes(routers).then(() => this)
+        return this.initDB()
+            .then(() => 
+                this.initRoutes(routers)
+                    .then(() => 
+                        this))
     }
+    
 }
