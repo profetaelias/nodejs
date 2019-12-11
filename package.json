@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/profetaelias/nodejs#readme",
   "dependencies": {
-    "bcrypt": "3.0.7",
+    "bcrypt": "^3.0.7",
     "mongoose": "5.7.13",
     "restify": "8.5.0",
     "restify-errors": "8.0.1"
