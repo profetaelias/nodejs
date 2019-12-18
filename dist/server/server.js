@@ -11,7 +11,7 @@ class Server {
             try {
                 this.application = restify.createServer({
                     name: 'rest-api',
-                    version: '1.0.0'
+                    versions: ['1.0.0', '2.0.0']
                 });
                 this.application.use(restify.plugins.queryParser());
                 this.application.use(restify.plugins.bodyParser());
