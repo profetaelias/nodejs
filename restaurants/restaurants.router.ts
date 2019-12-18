@@ -1,15 +1,42 @@
 import {ModelRouter} from '../common/model-router'
 import * as restify from 'restify'
 import {Restaurant} from './restaurants.model'
+import { NotFoundError } from 'restify-errors'
 
 class RestaurantsRouter extends ModelRouter<Restaurant> {
 
     constructor() {
         super(Restaurant)
-        this.on('beforeRender', document => {
-            document.password = undefined
-            //or delete document.password
-        })
+    }
+
+    findMenu = (req, resp, next) => {
+        Restaurant.findById(req.params.id, "+menu")
+            .then(rest => {
+                if(!rest) {
+                  throw new NotFoundError("Restaurant not found")
+                } else {
+                    resp.json(rest.menu)
+                    return next()
+                }
+            })
+            .catch(next)
+    }
+
+    replaceMenu = (req, resp, next) => {
+        Restaurant.findById(req.params.id)
+            .then(rest => {
+                if (!rest) {
+                    throw new NotFoundError("Restaurant not found")
+                } else {
+                    rest.menu = req.body
+                    return rest.save()
+                }
+            })
+            .then(rest => {
+                resp.json(rest.menu)
+                return next()
+            })
+            .catch(next)
     }
 
     applyRoutes(application: restify.Server) {
@@ -19,6 +46,8 @@ class RestaurantsRouter extends ModelRouter<Restaurant> {
         application.put('/restaurants/:id', [this.validateId,this.update])
         application.patch('/restaurants/:id', [this.validateId, this.findByIdAndUpdate])
         application.del('/restaurants/:id', [this.validateId, this.remove])
+        application.get('/restaurants/:id/menu', [this.validateId, this.findMenu])
+        application.put('/restaurants/:id/menu', [this.validateId, this.replaceMenu])
     }
 }
 
