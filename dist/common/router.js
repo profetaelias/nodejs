@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const restify_errors_1 = require("restify-errors");
 class Router extends events_1.EventEmitter {
-    envelope(document) {
-        let resource = Object.assign({ _links: {} }, document.toJSON());
-        resource._links.self = `${this.basePath}/${resource._id}`;
-        return resource;
+    envelope(document, objeto) {
+        return document;
+    }
+    envelopeAll(documents, options = {}) {
+        return documents;
     }
     render(response, next) {
         return (document) => {
@@ -20,17 +21,17 @@ class Router extends events_1.EventEmitter {
             return next();
         };
     }
-    renderAll(response, next) {
+    renderAll(response, next, options = {}) {
         return (documents) => {
             if (documents) {
                 documents.forEach((document, index, array) => {
                     this.emit('beforeRender', document);
                     array[index] = this.envelope(document, this);
                 });
-                response.json(documents);
+                response.json(this.envelopeAll(documents, options));
             }
             else {
-                response.json([]);
+                response.json(this.envelopeAll([], options));
             }
             return next();
         };

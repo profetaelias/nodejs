@@ -5,10 +5,12 @@ import {NotFoundError} from 'restify-errors'
 export abstract class Router extends EventEmitter{
     abstract applyRoutes(application: restify.Server)
 
-    envelope(document:any):any {
-        let resource = Object.assign({_links:{}}, document.toJSON())
-        resource._links.self = `${this.basePath}/${resource._id}`
-        return resource
+    envelope(document:any, objeto:any):any {
+        return document
+    }
+
+    envelopeAll(documents:any[], options: any = {}) : any {
+        return documents
     }
 
     render(response: restify.Response, next: restify.Next) {
@@ -23,17 +25,16 @@ export abstract class Router extends EventEmitter{
         }
     }
 
-    renderAll(response: restify.Response, next: restify.Next) {
+    renderAll(response: restify.Response, next: restify.Next, options: any = {}) {
         return (documents: any[]) => {
             if(documents){
                 documents.forEach((document, index, array) => {
-                    
                     this.emit('beforeRender', document)
                     array[index] = this.envelope(document, this)
                 })
-                response.json(documents)
+                response.json(this.envelopeAll(documents, options))
             } else {
-                response.json([])
+                response.json(this.envelopeAll([], options))
             }
             return next()
         }
