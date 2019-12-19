@@ -37,6 +37,11 @@ class RestaurantsRouter extends model_router_1.ModelRouter {
                 .catch(next);
         };
     }
+    envelope(document) {
+        let resource = super.envelope(document);
+        resource._links.menu = `${this.basePath}/${resource._id}/menu`;
+        return resource;
+    }
     applyRoutes(application) {
         application.get('/restaurants', this.findAll);
         application.get('/restaurants/:id', [this.validateId, this.findById]);

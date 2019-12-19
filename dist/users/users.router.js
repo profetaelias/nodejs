@@ -8,7 +8,15 @@ class UsersRouter extends model_router_1.ModelRouter {
         super(users_model_1.User);
         this.findByEmail = (req, resp, next) => {
             if (req.query.email) {
-                users_model_1.User.find({ email: req.query.email })
+                users_model_1.User.findByEmail(req.query.email)
+                    .then(user => {
+                    if (user) {
+                        return [user];
+                    }
+                    else {
+                        return [];
+                    }
+                })
                     .then(this.renderAll(resp, next))
                     .catch(next);
             }
@@ -22,15 +30,15 @@ class UsersRouter extends model_router_1.ModelRouter {
         });
     }
     applyRoutes(application) {
-        application.get('/users', restify.plugins.conditionalHandler([
+        application.get(`${this.basePath}`, restify.plugins.conditionalHandler([
             { version: '2.0.0', handler: [this.findByEmail, this.findAll] },
             { version: '1.0.0', handler: this.findAll }
         ]));
-        application.get('/users/:id', [this.validateId, this.findById]);
-        application.post('/users', this.save);
-        application.put('/users/:id', [this.validateId, this.update]);
-        application.patch('/users/:id', [this.validateId, this.findByIdAndUpdate]);
-        application.del('/users/:id', [this.validateId, this.remove]);
+        application.get(`${this.basePath}/:id`, [this.validateId, this.findById]);
+        application.post(`${this.basePath}`, this.save);
+        application.put(`${this.basePath}/:id`, [this.validateId, this.update]);
+        application.patch(`${this.basePath}/:id`, [this.validateId, this.findByIdAndUpdate]);
+        application.del(`${this.basePath}/:id`, [this.validateId, this.remove]);
     }
 }
 exports.usersRouter = new UsersRouter();
