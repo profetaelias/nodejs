@@ -1,6 +1,8 @@
 import {Router} from './router'
 import * as mongoose from 'mongoose'
 import {NotFoundError} from 'restify-errors'
+import {environment} from '../common/environment'
+
 
 export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     
@@ -9,6 +11,8 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     
     constructor(protected model: mongoose.Model<D>) {
         super()
+        console.log("TESTE")
+        console.log(environment.db.url)
         this.basePath = `/${model.collection.name}`
     }
 

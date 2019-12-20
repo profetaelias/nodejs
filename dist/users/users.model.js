@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const validator_1 = require("../common/validator");
 const bcrypt = require("bcrypt");
 const environment_1 = require("../common/environment");
+const yargs = require("yargs");
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -68,4 +69,8 @@ const updateMiddleware = function (next) {
 userSchema.pre('save', saveMiddleware);
 userSchema.pre('findOneAndUpdate', updateMiddleware);
 userSchema.pre('update', updateMiddleware);
-exports.User = mongoose.model('User', userSchema);
+let usuario;
+if (yargs.argv.t) {
+    environment_1.environment.db.url = 'mongodb://localhost/node-api-test-db';
+}
+exports.User = mongoose.models.User || mongoose.model('User', userSchema);

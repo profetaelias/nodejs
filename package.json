@@ -4,7 +4,7 @@
   "description": "API Rest base para projetos futuros",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest -u -t='unit'"
   },
   "repository": {
     "type": "git",
@@ -17,10 +17,15 @@
     "testEnvironment": "node",
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
-    }, 
+    },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
-      "ts", "tsx", "js", "jsx", "json", "node"
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
     ]
   },
   "bugs": {
@@ -28,10 +33,12 @@
   },
   "homepage": "https://github.com/profetaelias/nodejs#readme",
   "dependencies": {
+    "@types/yargs": "^13.0.3",
     "bcrypt": "^3.0.7",
     "mongoose": "5.7.13",
     "restify": "8.5.0",
-    "restify-errors": "8.0.1"
+    "restify-errors": "8.0.1",
+    "yargs": "^15.0.2"
   },
   "devDependencies": {
     "@types/jest": "22.1.2",

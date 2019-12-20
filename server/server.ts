@@ -29,7 +29,7 @@ export class Server {
                     resolve(this.application)
                 })
 
-                this.application.on('restifyError', handleError) 
+                this.application.on('restifyError', handleError)
             } catch (error) {
                 reject(error)
             }
@@ -47,6 +47,11 @@ export class Server {
                 this.initRoutes(routers)
                     .then(() => 
                         this))
+    }
+
+    shutdown() {
+        return mongoose.disconnect()
+            .then(() => this.application.close())
     }
     
 }

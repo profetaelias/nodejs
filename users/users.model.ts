@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose'
 import {validateCPF} from '../common/validator'
 import * as bcrypt from 'bcrypt'
 import {environment} from '../common/environment'
+import * as yargs from 'yargs'
 
 export interface User extends mongoose.Document {
   name: string,
@@ -10,7 +11,7 @@ export interface User extends mongoose.Document {
 }
 
 export interface UserModel extends mongoose.Model<User> {
-    findByEmail(email: string):Promise<User>
+  findByEmail(email: string):Promise<User>
 }
 
 const userSchema = new mongoose.Schema({
@@ -81,4 +82,9 @@ userSchema.pre('save', saveMiddleware)
 userSchema.pre('findOneAndUpdate', updateMiddleware)
 userSchema.pre('update', updateMiddleware)
 
-export const User = mongoose.model<User, UserModel>('User', userSchema)
+let usuario : any 
+if(yargs.argv.t) {
+  environment.db.url = 'mongodb://localhost/node-api-test-db'
+}
+
+export const User = mongoose.models.User || mongoose.model<User, UserModel>('User', userSchema) 
