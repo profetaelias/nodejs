@@ -82,9 +82,4 @@ userSchema.pre('save', saveMiddleware)
 userSchema.pre('findOneAndUpdate', updateMiddleware)
 userSchema.pre('update', updateMiddleware)
 
-let usuario : any 
-if(yargs.argv.t) {
-  environment.db.url = 'mongodb://localhost/node-api-test-db'
-}
-
-export const User = mongoose.models.User || mongoose.model<User, UserModel>('User', userSchema) 
+export const User = mongoose.model<User, UserModel>('User', userSchema)

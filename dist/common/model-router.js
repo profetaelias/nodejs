@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const router_1 = require("./router");
 const mongoose = require("mongoose");
 const restify_errors_1 = require("restify-errors");
-const environment_1 = require("../common/environment");
 class ModelRouter extends router_1.Router {
     constructor(model) {
         super();
@@ -60,7 +59,7 @@ class ModelRouter extends router_1.Router {
                 .catch(next);
         };
         this.remove = (req, res, next) => {
-            this.model.remove({ _id: req.params.id }, req.body).exec()
+            this.model.deleteOne({ _id: req.params.id }, req.body).exec()
                 .then((cmdResult) => {
                 if (cmdResult.deletedCount > 0) {
                     res.send(204);
@@ -71,8 +70,6 @@ class ModelRouter extends router_1.Router {
             }).catch(next);
             return next();
         };
-        console.log("TESTE");
-        console.log(environment_1.environment.db.url);
         this.basePath = `/${model.collection.name}`;
     }
     envelope(document) {

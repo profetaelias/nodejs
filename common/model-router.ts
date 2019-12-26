@@ -11,8 +11,6 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     
     constructor(protected model: mongoose.Model<D>) {
         super()
-        console.log("TESTE")
-        console.log(environment.db.url)
         this.basePath = `/${model.collection.name}`
     }
 
@@ -109,7 +107,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
     }
 
     remove = (req, res, next) => {
-        this.model.remove({_id: req.params.id}, req.body).exec()
+        this.model.deleteOne({_id: req.params.id}, req.body).exec()
             .then((cmdResult: any) => {
                 if(cmdResult.deletedCount > 0) {
                     res.send(204)
