@@ -17,7 +17,10 @@ class UsersRouter extends model_router_1.ModelRouter {
                         return [];
                     }
                 })
-                    .then(this.renderAll(resp, next))
+                    .then(this.renderAll(resp, next, {
+                    pageSize: this.pageSize,
+                    url: req.url
+                }))
                     .catch(next);
             }
             else {
