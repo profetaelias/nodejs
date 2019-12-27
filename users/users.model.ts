@@ -7,11 +7,14 @@ import * as yargs from 'yargs'
 export interface User extends mongoose.Document {
   name: string,
   email: string,
-  password: string
+  password: string,
+  gender: string,
+  cpf: string,
+  matches(password: string): boolean
 }
 
 export interface UserModel extends mongoose.Model<User> {
-  findByEmail(email: string):Promise<User>
+  findByEmail(email: string, projection?: string):Promise<User>
 }
 
 const userSchema = new mongoose.Schema({
@@ -47,9 +50,21 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-userSchema.statics.findByEmail = function(email: string) {
-    return this.findOne({email}) //{email: email}
+//-associa o findByMail ao model.
+//-não utilizar arrow functions para poder capturar o this 
+// dinamicamente para ser possível o bind com o documento que for
+// carregado
+userSchema.statics.findByEmail = function(email: string, projection: string) {
+    return this.findOne({email}, projection) //{email: email}, projection
 }
+
+//-associa o matches a instância
+//-não utilizar arrow functions para poder capturar o this 
+// dinamicamente para ser possível o bind com o documento que for
+// carregado
+userSchema.methods.matches = function(password: string) : boolean {
+  return bcrypt.compareSync(password, this.password)
+} 
 
 const hashPassword = (obj, next) => {
     bcrypt.hash(obj.password, environment.security.saltRounds)

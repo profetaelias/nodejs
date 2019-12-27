@@ -80,6 +80,7 @@ export abstract class ModelRouter<D extends mongoose.Document> extends Router {
 
     save = (req, res, next) => {
         let document = new this.model(req.body)
+        console.log(this.model)
         document.save()
             .then(this.render(res, next))
             .catch(next)

@@ -36,8 +36,19 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
-userSchema.statics.findByEmail = function (email) {
-    return this.findOne({ email }); //{email: email}
+//-associa o findByMail ao model.
+//-não utilizar arrow functions para poder capturar o this 
+// dinamicamente para ser possível o bind com o documento que for
+// carregado
+userSchema.statics.findByEmail = function (email, projection) {
+    return this.findOne({ email }, projection); //{email: email}, projection
+};
+//-associa o matches a instância
+//-não utilizar arrow functions para poder capturar o this 
+// dinamicamente para ser possível o bind com o documento que for
+// carregado
+userSchema.methods.matches = function (password) {
+    return bcrypt.compareSync(password, this.password);
 };
 const hashPassword = (obj, next) => {
     bcrypt.hash(obj.password, environment_1.environment.security.saltRounds)
