@@ -37,7 +37,7 @@
   "homepage": "https://github.com/profetaelias/nodejs#readme",
   "dependencies": {
     "@types/yargs": "^13.0.3",
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "jsonwebtoken": "8.1.1",
     "mongoose": "5.7.13",
     "restify": "8.5.0",
